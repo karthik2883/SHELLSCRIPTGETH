@@ -88,7 +88,7 @@ GETHATTACH(){
                                                # echo "$account ,$jqlto "
                                                 echo "/******** IF to IS EQUAL TO THE ACCOUNT ADDRESS **********/"
                                                 if [ $account == $jqlto ];then
-                                                  "insert into ethtransaction(NULL,$jqlto ,$jqlfrom,$jqlhash,$jqlvalue,$jqlgasPrice);\n" >>../sql/eth.sql
+                                                   echo "insert into ethtransaction(NULL,$jqlto ,$jqlfrom,$jqlhash,$jqlvalue,$jqlgasPrice);\n" >>../sql/eth.sql
                                                    echo $jqlto ,$jqlfrom ,$jqlhash ,$jqlvalue ,$jqlgasPrice
                                                    echo " /******** SAVE IN MYSQL TABLE   **********/" 
                                                 else

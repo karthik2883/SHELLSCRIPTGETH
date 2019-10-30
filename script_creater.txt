@@ -1,0 +1,11 @@
+#!/bin/bash
+ 
+number1=3
+number2=2
+echo "addtion $((number1+number2))"
+echo "subtraction $((number1-number2))" 
+echo "multiplication $((number1*number2))" 
+echo "poweroff $((number1**number2))" 
+ 
+echo "appending addition $((number1+=number2))" 
+echo "$((number1))" 

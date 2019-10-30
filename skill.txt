@@ -1,0 +1,5 @@
+#!/bin/bash
+touch 1.txt 2.txt
+ls -l > 2.txt
+read -p "what prefix you want"  pref
+mv 2.txt ${pref}2.txt

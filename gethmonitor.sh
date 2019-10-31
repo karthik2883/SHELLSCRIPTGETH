@@ -13,10 +13,11 @@ GETHATTACH(){
    path=/blockchain/ethereum/geth.ipc
    blk_nu_cost=0
    tr_cnt=0
+   exblocknumber=blocknumber 
    #WHILE WILL KEEP ALIVE  
    while [ true ];
    do
-    exblocknumber=$($g --exec "eth.blockNumber" attach $path)
+    exblocknumber=$(($exblocknumber+1)) 
      if [ $exblocknumber ];then
           ethtranscount=$($g --exec "eth.getBlockTransactionCount($exblocknumber)" attach $path)
           if [ $exblocknumber != $blk_nu_cost ];then
@@ -72,8 +73,8 @@ GETHATTACH(){
                                         rptlstbracket=$(sed -i 's/}"/}/g' $tr_cnt".json")
                                         
                                         echo " /******** RUN 1 MORE LOOP   **********/"
-                                       
-                                         jqla=$(jq '.[]'  account_txt.json)
+                                        cat account_txt.json  | jq '.' > accounts.json                                      
+                                       #  jqla=$(jq '.[]'  account_txt.json)
                                          jqlto=$(jq '.to'  $tr_cnt".json")
                                          jqlfrom=$(jq '.from'  $tr_cnt".json")
                                          jqlhash=$(jq '.hash'  $tr_cnt".json")
@@ -83,26 +84,27 @@ GETHATTACH(){
                                          
                                          #touch transaction.sql
                                         
-                                         for account in $jqla
-                                          do
+                                        # for account in $jqla
+                                         # do
                                                # echo "$account ,$jqlto "
                                                 echo "/******** IF to IS EQUAL TO THE ACCOUNT ADDRESS **********/"
-                                                if [ $account == $jqlto ];then
-                                                   echo "insert into ethtransaction(NULL,$jqlto ,$jqlfrom,$jqlhash,$jqlvalue,$jqlgasPrice);\n" >>../sql/eth.sql
+                                                 grep "$jqlto" accounts.json 
+                                                if [ $? -eq 0 ];then
+                                                   echo "insert into ethtransaction(NULL,$jqlto ,$jqlfrom,$jqlhash,$jqlvalue,$jqlgasPrice);\n" >>home/rammohan/sql/eth.sql
                                                    echo $jqlto ,$jqlfrom ,$jqlhash ,$jqlvalue ,$jqlgasPrice
                                                    echo " /******** SAVE IN MYSQL TABLE   **********/" 
                                                 else
                                                     echo " /********NO MATCH RM FILE **********/"    
                                                     rm -rf $tr_cnt".json"
                                                 fi
-                                          done
+                                          #done
                                                                         
                                        
                                     done
                                     echo "/********COME OUT OF FOLDER **********/"
                                     cd ..
                                     echo "/********RM FOLDER **********/"
-                                    rm -rf $exblocknumber
+                                   # rm -rf $exblocknumber
                                     
                           fi
                   fi
